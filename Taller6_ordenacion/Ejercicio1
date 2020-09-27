@@ -1,0 +1,24 @@
+import time
+def eliminarrepetidouno(lista):
+    listanueva = []
+    for i in range(len(lista)):
+        if not lista[i] in listanueva:
+            listanueva.append(lista[i])
+    return listanueva
+
+listarepetida = [4,7,11,4,9,5,11,7,3,5]
+print("Se probara la eficiencia del metodo de eliminar repetido con la siguiente lista")
+print(listarepetida)
+print("Con los elementos sin ordenar : ")
+
+start_time = time.time()
+print(eliminarrepetidouno(listarepetida))
+print("Tarda--- %s segundos---" %(time.time()-start_time))
+
+listarepetida.sort()
+print("Con elementos ya ordenados: ")
+start_time = time.time()
+print(listarepetida)
+print(eliminarrepetidouno(listarepetida))
+print("Tarda--- %s segundos---" %(time.time()-start_time))
+#Terminado
