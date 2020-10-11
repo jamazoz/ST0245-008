@@ -1,0 +1,83 @@
+#Basadoenelalgoritmoquereversa
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+class SinglyLinkedList:
+    def __init__(self, he):
+        self.he = he
+    
+    #Largo de la lista
+    def length(self):
+        current = self.he
+        if current is not None:
+            count = 1
+            while current.next is not None:
+                count += 1
+                current = current.next
+            return count
+        else:
+            return 0
+            
+    #Agregar elementos a la lista
+    def insert(self, data, position):
+        new_node = Node(data)
+        if position == 0:
+            new_node.next = head.he
+            head.he = new_node
+        else:
+            current = head.he
+            k = 1
+            while current.next is not None and k < position:
+                current = current.next
+                k += 1
+            new_node.next = current.next
+            current.next = new_node   
+    def reverse(self):
+        pre=sig= None
+        i= self.he
+       
+        while  i:
+            sig=i.next
+            i.next =pre
+            pre=i
+            i=sig
+        self.he=pre
+
+    #Este metodo rota la lista un k determinado de veces
+    def rotar(self, k):
+        i = 0
+        largo = self.length()
+        if k != 0 and self.he is not None:
+            #Estos dos while son para que no haga recorridos innecesarios pudiendo obtener el mismo resultado con menos
+            while k < largo:
+                k = k + largo
+            while k >= largo:
+                k = k - largo
+            #Este while es el que realiza la rotacion siempre que i no alcance el numero de K
+            while  i != k:
+                current = self.he
+                self.he = current.next
+                current.next = None
+                self.insert(current.data, largo-1)
+                i += 1
+
+#creamos la lista
+head= SinglyLinkedList(Node(1))
+#rellenamos la lista
+for i in range(2,6):
+    head.insert(i, i-1)
+#mostramos la lista
+current = head.he
+while current is not None:
+    print(current.data)
+    current = current.next 
+
+n = int(input("Cuantas veces desea rotar los elementos de la lista anterior(tambien sirven negativos): "))
+print("Ahora se imprimira rotado: ")
+head.rotar(n)
+current = head.he
+while current is not None:
+    print(current.data)
+    current = current.next 
+print("Nota final, creo que lo hice al contrario por lo que invito a que se testee con un mismo n y -n")
