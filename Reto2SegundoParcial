@@ -1,0 +1,216 @@
+#Julian Andres Mazo Z 202010110010
+import os
+
+class node():
+    def __init__(self, dato):
+        self.left = None
+        self.right = None
+        self.dato = dato
+
+class arbol():
+    def __init__(self):
+        self.root = None
+        
+    def insert(self, raiz, dato):
+        #la raiz esta vacia llevamos el dato al primer nodo
+        if raiz == None:
+            raiz = node(dato)
+        else:
+            d = raiz.dato
+            if dato < d:
+                #Llamada recursiva para insertar menores a la izquierda
+                raiz.left = self.insert(raiz.left, dato)
+            else:
+                #llamada recursiva para insertar mayores a la derecha
+                raiz.right = self.insert(raiz.right, dato)
+        return raiz
+
+    def inorder(self, raiz):
+        if raiz == None:
+            return None
+        else:
+            self.inorder(raiz.left)
+            print(raiz.dato)
+            self.inorder(raiz.right)
+
+    def preorder(self, a):
+        if a == None:
+            return None
+        else:
+            print(a.dato)
+            self.preorder(a.left)
+            self.preorder(a.right)
+
+    def postorder(self, a):
+        if a == None:
+            return None
+        else:
+            self.postorder(a.left)
+            self.postorder(a.right)
+            print(a.dato)
+
+    def buscar(self, dato, a):
+        if a == None:
+            return None
+        else:
+            if dato == a.dato:
+                return a.dato
+            else:
+                if dato < a.dato:
+                    return self.buscar(dato, a.left)
+                else:
+                    return self.buscar(dato, a.right)
+    
+    def reemplazar(self, raiz, right):
+        if right.left == None:
+            raiz.dato = right.dato
+            raiz.right = self.borrar(right.dato, raiz.right)
+            return raiz
+        else:
+            raiz = self.reemplazar(raiz, right.left)
+            return raiz
+    
+    def borrar (self, dato, raiz):
+        if raiz == None: #Si la raiz esta vacia no retorna nada
+            return None
+        else:
+            if dato == raiz.dato: #Si la raiz es el mismo dato que se quiere eliminar
+                if raiz.left == None and raiz.right == None:
+                    raiz = None
+                    return raiz
+                elif raiz.left == None:
+                    raiz = raiz.right
+                    return raiz
+                elif raiz.right == None:
+                    raiz = raiz.left
+                    return raiz
+                else: #Quiere decir, si tiene hijo izquierdo e hijo derecho llama al metodo reemplazar
+                    raiz = self.reemplazar(raiz, raiz.right)
+                    return raiz
+             #Si la raiz es distinta al dato que se desea buscar
+            elif dato < raiz.dato: #Si es menor empezara a buscar con llamadas recursivas la raiz que sea igual al dato por la izquierda
+                raiz.left = self.borrar(dato, raiz.left)
+                return raiz
+            else: ##Si es mayor empezara a buscar con llamadas recursivas la raiz que sea igual al dato por la derecha
+                raiz.right = self.borrar(dato, raiz.right)
+                return raiz
+
+    #Otro codigo que no me funciono
+    def borrarprueba(self,borrar, raiz):
+        if self.buscar(borrar,raiz) != False:
+            auxiliar = raiz
+            if auxiliar.izq == None and auxiliar.der==None:
+                raiz = None
+        else:
+            return "Ups"
+        
+    #Un codigo larguisimo que no me funcionó
+    '''def eliminar(self, borrar, raiz): 
+        auxiliar = raiz
+        padre = raiz
+        hijoIzq = True
+        while(auxiliar.dato != borrar):
+            padre = auxiliar 
+            if borrar < auxiliar.dato:
+                hijoIzq = True
+                auxiliar = auxiliar.left
+            else:
+                hijoIzq = False
+                auxiliar = auxiliar.right
+            if(auxiliar == None):
+                return False
+        if auxiliar.left == None and auxiliar.right==None:
+            if auxiliar == raiz:
+                raiz = None
+            elif hijoIzq == True:
+                padre.left == None
+            else: 
+                padre.right == None
+        elif auxiliar.right == None:
+            if auxiliar == raiz:
+                raiz = auxiliar.left
+            elif hijoIzq == True:
+                padre.left == auxiliar.left
+            else: 
+                padre.right == auxiliar.left
+        elif auxiliar.left == None:
+            if auxiliar == raiz:
+                raiz = auxiliar.right
+            elif hijoIzq == True:
+                padre.left == auxiliar.right
+            else: 
+                padre.right == auxiliar.right
+        else:
+            replace: reemplazar(auxiliar)
+            if(auxiliar == raiz):
+                raiz = replace
+            elif (hijoIzq):
+                padre.left = replace
+            else:
+                padre.right = replace'''
+            
+    #Pienso que el reto era MUY complicado, dejare la explicacion aqui (aunque pasarlo a codigo fue otro mundo):
+    # al usuario digitar lo que desea borrar el programa busca si se encuentra el elemento, si no se encuentra no borra nada
+    #Si lo encuentra, el programa verificará si el nodo tiene hijos/hojas, si no las tiene solo será borrado y ya
+    #En caso de tenerlas, verificará si tiene una o 2, si tiene solo 1 esa hoja el nodo padre se borra y la hoja pasa a tomar su lugar
+    #En caso de tener hoja izquierda y hoja derecha, SIEMPRE la hoja izquierda reemplazará a la raiz/padre;
+    #la hoja derecha quedará donde está, Y, los hijos que poseía
+    #La hoja izquierda (que ahora es raiz) si estaban en la izquierda quedan igual, si estaban en la derecha, se compararán con las hojas derechas
+    #que ya habia previamente, quedando reemplazado el arbol
+    
+    #Pienso que seria muy bueno que igualmente se explicara en clase, porque tuve que recurrir a ayuda para entender como pasar a codigo
+tree = arbol()
+
+while True:
+    os.system("cls")
+    print("Arbol ABB")
+    opc = input("\n1.-Insertar nodo \n2.-Inorden \n3.-Preorden \n4.-Postorden \n5.-Buscar \n6.-Borrar \n0.-Salir \n\nElige una opcion -> ")
+
+    if opc == '1':
+        nodo = input("\nIngresa el nodo -> ")
+        if nodo.isdigit():
+            nodo = int(nodo)
+            tree.root = tree.insert(tree.root, nodo)
+        else:
+            print("\nIngresa solo digitos...")
+    elif opc == '2':
+        if tree.root == None:
+            print("Vacio")
+        else:
+            tree.inorder(tree.root)
+    elif opc == '3':
+        if tree.root == None:
+            print("Vacio")
+        else:
+            tree.preorder(tree.root)
+    elif opc == '4':
+        if tree.root == None:
+            print("Vacio")
+        else:
+            tree.postorder(tree.root)
+    elif opc == '5':
+        nodo = input("\nIngresa el nodo a buscar -> ")
+        if nodo.isdigit():
+            nodo = int(nodo)
+            if tree.buscar(nodo, tree.root) == None:
+                print("\nNodo no encontrado...")
+            else:
+                print("\nNodo encontrado -> ",tree.buscar(nodo, tree.root), " si existe...")
+        else:
+            print("\nIngresa solo digitos...")        
+    elif opc == '6':
+        if tree.root == None:
+            print("Vacio")
+        else:
+            borrar= int(input("Digite el nodo a borrar -> "))
+            tree.borrar(borrar, tree.root)
+    elif opc == '0':
+        print("\nElegiste salir...\n")
+        os.system("pause")
+        break
+    else:
+        print("\nElige una opcion correcta...")
+    print()
+    os.system("pause")
+
+print()
