@@ -1,0 +1,11 @@
+#Esta es la construccion del codigo para invertir, suponiendo que se le pasa una pila, no está el codigo entero de la pila ya que tuve problemas y no me funciona
+#Así que mando solo el metodo, que es lo que se pidió en el punto, y es lo que pude hacer teniendo ese problema
+
+    def invertirPila(self):
+        nuevapila = Pila()
+        for i in range(1, len(self.pila)):
+            nuevapila.apilar(self.pila[-i])
+        nuevapila.apilar(self.pila[0])
+        for i in range(len(self.pila)):
+            self.desapilar()
+        return nuevapila
